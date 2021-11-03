@@ -1,0 +1,75 @@
+﻿@model InmobiliariaLucero.Models.Login
+
+@{ ViewData["Title"] = "Acceso de usuarios"; }
+
+<style>
+    .login-block {
+        float: left;
+        width: 100%;
+        padding: 50px 0px 50px;
+    }
+
+    .containerLogin {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 15px 20px 0px rgba(0,0,0,0.1);
+    }
+
+    .login-sec {
+        padding: 50px 30px;
+        position: relative;
+    }
+
+        .login-sec h2 {
+            margin-bottom: 30px;
+            font-weight: 800;
+            font-size: 30px;
+            color: rgb(63, 63, 63);
+        }
+
+            .login-sec h2:after {
+                content: " ";
+                width: 100px;
+                height: 5px;
+                background: #FEB58A;
+                display: block;
+                margin-top: 20px;
+                border-radius: 3px;
+                margin-left: auto;
+                margin-right: auto
+            }
+
+    .btn-login {
+        background: #72d944;
+        color: #0a0a0a;
+        font-weight: 600;
+    }
+
+</style>
+    <h4 class="text-center mt-2 mb-2">Login</h4>
+
+<div class="row d-flex justify-content-center">
+    <div class="col-md-3 formulario">
+        <form asp-action="login" class="needs-validation" novalidate>
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-group has-danger">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" required>
+                <div class="invalid-feedback">Ingrese Correo Electronico</div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Clave" class="control-label"></label>
+                <input asp-for="Clave" class="form-control" required>
+                <div class="invalid-feedback">Ingrese Contraseña</div>
+            </div>
+
+            <div class="form-group d-flex justify-content-center">
+                <input type="submit" value="Ingresar" class="btn btn-primary btn-lg" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+

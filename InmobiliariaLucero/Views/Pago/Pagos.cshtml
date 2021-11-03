@@ -1,0 +1,83 @@
+﻿@model IEnumerable<InmobiliariaLucero.Models.Pago>
+
+@{ ViewData["Title"] = "Pagos";
+                List<Pago> pagos = ViewData[nameof(Pago)] as List<Pago>; }
+
+<h1>Pagos Por Contrato</h1>
+
+<p>
+    <a asp-action="Create"> <i class="bi bi-cash"></i>Nuevo Pago</a> &nbsp &nbsp &nbsp &nbsp <a asp-controller="Contrato" asp-action="Index"><i class="bi bi-reply"></i>Volver</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Codigo de Pago
+            </th>
+            <th>
+                Cuota Nro
+            </th>
+            <th>
+                Fecha Pago
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Importe)
+            </th>
+            <th>
+                Contrato Nro
+            </th>
+
+            <th>
+                Inicio Contrato
+            </th>
+            <th>
+                Fin Contrato
+            </th>
+            <th>
+                Datos Inquilino
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in pagos)
+        {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Id)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NroPago)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FechaPago)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Importe)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.IdCon)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Contrato.FechaInicio)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Contrato.FechaFin)
+    </td>
+    <td>
+        @Html.DisplayFor(model => item.Contrato.Inquilino.Nombre)
+        @Html.DisplayFor(model => item.Contrato.Inquilino.Apellido)
+    </td>
+    <td>
+
+        <a asp-action="Details" asp-route-id="@item.Id" title="Detalles"><span> <i class="bi bi-card-list"></i></span></a> &nbsp &nbsp
+        <a asp-action="Edit" asp-route-id="@item.Id" title="Editar"><span> <i class="bi bi-pencil"></i></span></a> &nbsp &nbsp
+        <a asp-action="Delete" asp-route-id="@item.Id" title="Eliminar"><span><i class="bi bi-trash"></i></span></a>&nbsp &nbsp
+
+    </td>
+</tr>}
+    </tbody>
+</table>

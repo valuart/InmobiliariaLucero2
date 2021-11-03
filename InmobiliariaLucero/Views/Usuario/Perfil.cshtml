@@ -1,0 +1,81 @@
+﻿@model InmobiliariaLucero.Models.Usuario
+@{
+    ViewData["Title"] = "Perfil";
+}
+
+<h1>Perfil</h1>
+<div class="container emp-profile">
+    <div class="row">
+        <div class="col-md-4">
+            @*<form asp-action="Perfil" enctype="multipart/form-data">
+                    <div class="profile-img">
+                        <img src="@Model.Avatar" alt="Sin foto de perfil" />
+
+                        <div class="file btn btn-lg btn-primary">
+                            Elegir foto de perfil
+                            <input asp-for="AvatarFile" class="form-control" />
+                            <span asp-validation-for="AvatarFile" class="text-danger"></span>
+                        </div>
+                        <input type="submit" value="Cambiar" class="button" />
+                    </div>
+                </form>*@
+        </div>
+        <div class="col-md-6">
+            <div class="profile-head">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="font-weight-bold">@Html.DisplayNameFor(model => model.Id)</label>
+                    </div>
+                    <div class="col-md-6">
+                        <p>@Html.DisplayFor(model => model.Id)</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="font-weight-bold">@Html.DisplayNameFor(model => model.Nombre)</label>
+                    </div>
+                    <div class="col-md-6">
+                        <p>@Html.DisplayFor(model => model.Nombre)</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="font-weight-bold">@Html.DisplayNameFor(model => model.Apellido)</label>
+                    </div>
+                    <div class="col-md-6">
+                        <p>@Html.DisplayFor(model => model.Apellido)</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="font-weight-bold">@Html.DisplayNameFor(model => model.Email)</label>
+                    </div>
+                    <div class="col-md-6">
+                        <p>@Html.DisplayFor(model => model.Email)</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="font-weight-bold">@Html.DisplayNameFor(model => model.RolNombre)</label>
+                    </div>
+                    <div class="col-md-6">
+                        <p>@Html.DisplayFor(model => model.RolNombre)</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="font-weight-bold">@Html.DisplayNameFor(model => model.AvatarFile)</label>
+                    </div>
+                    <div class="col-md-6">
+                        <p>@Html.DisplayFor(model => model.Avatar)</p>
+                    </div>
+                </div>
+            </div>
+                </div>
+                <div class="col-md-2">
+                    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "button btn" })
+                </div>
+            </div>
+        </div>
+
+

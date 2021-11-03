@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "Privado";
+}
+
+<h1>Privado</h1>
+
+<h4>
+    <b>
+        @foreach (var u in User.Claims)
+        {
+            @u.Value<br />}
+    </b>
+</h4>

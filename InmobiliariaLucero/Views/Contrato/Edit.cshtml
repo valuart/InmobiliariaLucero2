@@ -1,0 +1,70 @@
+﻿@model InmobiliariaLucero.Models.Contrato
+
+@{
+    ViewData["Title"] = "Edit";
+    IList<Inmueble> inmueble = ViewBag.Inmueble as List<Inmueble>;
+    IList<Inquilino> inquilino = ViewBag.Inquilino as List<Inquilino>;
+}
+
+<h1>Editar</h1>
+
+<h4>Contrato</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Propietario</label>
+                <select class="form-control" name="IdInmu">
+                    @foreach (var item in inmueble)
+                    {
+                        @:<option @(item.Id == Model.IdInmu ? "selected" : "") value="@item.Id">@(item.Propietario.Nombre + " " + item.Propietario.Apellido)</option>
+                    }
+                </select>
+                <span asp-validation-for="IdInmu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Inquilino</label>
+                <select class="form-control" name="IdInqui">
+                    @foreach (var item in inquilino)
+                    {
+                        @:<option @(item.Id == Model.IdInqui ? "selected" : "") value="@item.Id">@(item.Nombre + " " + item.Apellido)</option>
+                    }
+                </select>
+                <span asp-validation-for="IdInqui" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaInicio" class="control-label"></label>
+                <input asp-for="FechaInicio" class="form-control" />
+                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaFin" class="control-label"></label>
+                <input asp-for="FechaFin" class="form-control" />
+                <span asp-validation-for="FechaFin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Monto" class="control-label"></label>
+                <input asp-for="Monto" class="form-control" />
+                <span asp-validation-for="Monto" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+        </div>
+    </div>
+
+<div>
+    <a asp-action="Index">Volver al indice</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

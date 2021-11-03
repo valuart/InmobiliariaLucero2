@@ -1,0 +1,55 @@
+﻿@model InmobiliariaLucero.Models.Pago
+
+@{
+    ViewData["Title"] = "Edit";
+    IList<Contrato> contrato = ViewBag.Contrato as List<Contrato>;
+
+}
+
+<h1>Editar</h1>
+
+<h4>Pago</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NroPago" class="control-label"></label>
+                <input asp-for="NroPago" class="form-control" />
+                <span asp-validation-for="NroPago" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaPago" class="control-label"></label>
+                <input asp-for="FechaPago" class="form-control" />
+                <span asp-validation-for="FechaPago" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Importe" class="control-label"></label>
+                <input asp-for="Importe" class="form-control" />
+                <span asp-validation-for="Importe" class="text-danger"></span>
+            </div>
+            <div class="inputBox">
+                <select class="selectpicker form-control " data-live-search="true" title="CONTRATOS" name="IdCon">
+                    @foreach (var item in (IList<Contrato>)ViewBag.Contrato)
+                    {
+                        <option value="@item.Id">@(item.Inquilino.Apellido + " " + item.Inmueble.Direccion)</option>
+                    }
+                </select>
+                <span asp-validation-for="IdCon" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Volver al Indice</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

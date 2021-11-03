@@ -1,0 +1,59 @@
+﻿@model InmobiliariaLucero.Models.Contrato
+
+@{ ViewData["Title"] = "Create";
+    IList<Inquilino> inquilino = ViewBag.Inquilino as List<Inquilino>;
+    IList<Inmueble> inmueble = ViewBag.Inmueble as List<Inmueble>; }
+
+<h1>Crear Contrato</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+
+            <div class="form-group">
+                <label class="control-label">Inmueble</label>
+                <select class="form-control" name="IdInmu">
+                    @foreach (var item in inmueble)
+                    {
+                     <option value="@item.Id"> @(item.Direccion)</option>}
+                </select>
+                <span asp-validation-for="IdInmu" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Inquilino</label>
+                <select class="form-control" name="Idinqui">
+                    @foreach (var item in inquilino)
+                    {
+                       <option value="@item.Id">@(item.Nombre + " " + item.Apellido)</option>}
+                </select>
+                <span asp-validation-for="IdInqui" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FechaInicio" class="control-label"></label>
+                <input asp-for="FechaInicio" class="form-control" />
+                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FechaFin" class="control-label"></label>
+                <input asp-for="FechaFin" class="form-control" />
+                <span asp-validation-for="FechaFin" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Volver al Indice</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
