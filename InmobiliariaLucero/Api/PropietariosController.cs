@@ -19,9 +19,9 @@ namespace InmobiliariaLucero.Api
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
-    public class PropietariosController : ControllerBase//
+    public class PropietariosController : ControllerBase
     {
-        private readonly DataContext contexto;
+        private readonly Models.DataContext contexto;
         private readonly IConfiguration config;
 
         public PropietariosController(DataContext contexto, IConfiguration config)
@@ -29,29 +29,17 @@ namespace InmobiliariaLucero.Api
             this.contexto = contexto;
             this.config = config;
         }
+
+
         // GET: api/<PropietariosController>
+        //obtiene datos del propietario logueado
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult<Propietario>> Get()
         {
             try
             {
-                /*contexto.Inmuebles
-                    .Include(x => x.Duenio)
-                    .Where(x => x.Duenio.Nombre == "")//.ToList() => lista de inmuebles
-                    .Select(x => x.Duenio)
-                    .ToList();//lista de propietarios
                 var usuario = User.Identity.Name;
-                var res = contexto.Propietario.Select(x => new { x.Nombre, x.Apellido, x.Email }).SingleOrDefault(x => x.Email == usuario);
-                return Ok(res); */
-                // return contexto.Propietario;
-
-                var usuario = User.Identity.Name;
-                var propietario = contexto.Propietarios.FirstOrDefault(x => x.Email == usuario);
-
-
-
-                return Ok(propietario);
-
+                return await contexto.Propietarios.SingleOrDefaultAsync(x => x.Email == usuario);
             }
             catch (Exception ex)
             {
@@ -59,52 +47,31 @@ namespace InmobiliariaLucero.Api
             }
         }
 
-
-
-        // GET api/<PropietariosController>/GetAll
-        [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
-        {
-            try
-            {
-                return Ok(await contexto.Propietarios.ToListAsync());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        // POST api/<PropietariosController>/login
+        // POST api/<controller>/login
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromForm] Login login)
         {
-
+            Propietario p = null;
             try
             {
+                p = await contexto.Propietarios.FirstOrDefaultAsync(x => x.Email == login.Email);
 
+                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: login.Clave,
+                    salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
+                    prf: KeyDerivationPrf.HMACSHA1,
+                    iterationCount: 1000,
+                    numBytesRequested: 256 / 8));
 
-                string hashed1 = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                   password: login.Clave,
-                   salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
-                   prf: KeyDerivationPrf.HMACSHA1,
-                   iterationCount: 1000,
-                   numBytesRequested: 256 / 8));
-                var p = contexto.Propietarios.FirstOrDefault(x => x.Email == login.Email);
-                string hashed2 = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                   password: login.Clave,
-                   salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
-                   prf: KeyDerivationPrf.HMACSHA1,
-                   iterationCount: 1000,
-                   numBytesRequested: 256 / 8));
-                if (p == null || hashed1 != hashed2)
+                if (p == null || p.Clave != hashed)
                 {
-                    return BadRequest("Email y/o Contraseña incorrecta");
+                    return BadRequest("Nombre de usuario o clave incorrecta");
                 }
                 else
                 {
-                    var key = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(config["TokenAuthentication:SecretKey"]));
+                    var key = new SymmetricSecurityKey(
+                        System.Text.Encoding.ASCII.GetBytes(config["TokenAuthentication:SecretKey"]));
                     var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
                     var claims = new List<Claim>
                     {
@@ -125,124 +92,28 @@ namespace InmobiliariaLucero.Api
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message.ToString());
             }
         }
 
-
-        // POST api/<PropietariosController>/login
-        [HttpGet("propietarioActual")]
-        //public async Task<IActionResult> PropietarioActual([FromBody] LoginView loginView)
-        public async Task<IActionResult> PropietarioActual()
-        {
-            try
-            {
-                return Ok(
-                    contexto.Propietarios
-
-                    .Select(x => new { x.id, x.Nombre, x.Apellido, x.Dni, x.Email, x.Clave, x.Telefono })
-                    .FirstOrDefault(x => x.Email == User.Identity.Name));
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-
-        // POST api/<PropietariosController>
-        [HttpPost]
-        public async Task<IActionResult> Post([FromForm] Propietario entidad)
+        //PUT api/Controller/5
+        //edita los datos del propietario logueado
+        [HttpPut()]
+        public async Task<IActionResult> Put([FromBody] Propietario p)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await contexto.Propietarios.AddAsync(entidad);
-                    contexto.SaveChanges();
-                    return CreatedAtAction(nameof(Get), new { id = entidad.id }, entidad);
-                }
-                return BadRequest();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        // PUT api/<PropietariosController>/1
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Propietario entidad)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    entidad.id = id;
-                    contexto.Propietarios.Update(entidad);
+                    contexto.Propietarios.Update(p);
                     await contexto.SaveChangesAsync();
-                    return Ok(entidad);
-                }
-                return BadRequest();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        // DELETE api/<PropietariosController>/borra/4
-        [HttpDelete("borra{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var p = contexto.Propietarios.Find(id);
-                    if (p == null)
-                        return NotFound();
-                    contexto.Propietarios.Remove(p);
-                    contexto.SaveChanges();
                     return Ok(p);
                 }
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
-            }
-        }
-
-        // GET: api/Propietarios/test
-        [HttpGet("test")]
-        [AllowAnonymous]
-        public IActionResult Test()
-        {
-            try
-            {
-                return Ok("anduvo");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        // GET: api/Propietarios/test/5
-        [HttpGet("test/{codigo}")]
-        [AllowAnonymous]
-        public IActionResult Code(int codigo)
-        {
-            try
-            {
-                //StatusCodes.Status418ImATeapot //constantes con códigos
-                return StatusCode(codigo, new { Mensaje = "Anduvo", Error = false });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
+                return BadRequest(ex.Message.ToString());
             }
         }
     }

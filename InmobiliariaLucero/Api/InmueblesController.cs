@@ -72,13 +72,13 @@ namespace InmobiliariaLucero.Api
                 var usuario = User.Identity.Name;
                 var hoy = DateTime.Now;
 
-                var query = from inmu in context.Inmuebles
+                var consulta = from inmu in context.Inmuebles
                             join cont in context.Contratos
                                 on inmu.Id equals cont.Id
                             where cont.FechaInicio <= hoy && cont.FechaFin >= hoy && usuario == inmu.Propietario.Email
                             select cont;
 
-               return Ok(query);
+               return Ok(consulta);
             }
             catch (Exception ex)
             {
