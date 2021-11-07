@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -23,11 +24,13 @@ namespace InmobiliariaLucero.Api
     {
         private readonly Models.DataContext contexto;
         private readonly IConfiguration config;
+        private readonly Environment envir;
 
-        public PropietariosController(DataContext contexto, IConfiguration config)
+        public PropietariosController(DataContext contexto, IConfiguration config, Environment envir)
         {
             this.contexto = contexto;
             this.config = config;
+            this.envir = envir;
         }
 
 
@@ -116,5 +119,7 @@ namespace InmobiliariaLucero.Api
                 return BadRequest(ex.Message.ToString());
             }
         }
+
     }
 }
+
