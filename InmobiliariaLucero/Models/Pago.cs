@@ -15,9 +15,9 @@ namespace InmobiliariaLucero.Models
         [DisplayName("Numero de pago")]
         public int NroPago { get; set; }
         [DisplayName("Fecha de pago"), DataType(DataType.Date)]
-        public DateTime FechaPago { get; set; }
-        public decimal Importe { get; set; }
         public int IdCon { get; set; }
+        public decimal Importe { get; set; }
+        public DateTime FechaPago { get; set; }
         public Contrato Contrato { get; set; }
     }
 }
