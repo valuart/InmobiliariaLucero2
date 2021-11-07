@@ -24,13 +24,13 @@ namespace InmobiliariaLucero.Api
     {
         private readonly Models.DataContext contexto;
         private readonly IConfiguration config;
-        private readonly Environment envir;
+     
 
-        public PropietariosController(DataContext contexto, IConfiguration config, Environment envir)
+        public PropietariosController(DataContext contexto, IConfiguration config)
         {
             this.contexto = contexto;
             this.config = config;
-            this.envir = envir;
+       
         }
 
 
