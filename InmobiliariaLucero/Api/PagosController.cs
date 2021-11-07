@@ -34,7 +34,7 @@ namespace InmobiliariaLucero.Api
             try
             {
                 var pagos = await _context.Pagos.Include(x => x.Contrato).Where(x =>
-                     x.IdCon == id
+                     x.Id == id
                     ).ToListAsync();
 
                 return Ok(pagos);
